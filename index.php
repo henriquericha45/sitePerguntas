@@ -1,98 +1,83 @@
-<?php
-    $questoes = array(
-        '
-        <form method="post">
-            <label> O alex é ruim no CS? </label><br>
-            <input type="radio" name="resposta1" value="r1"> Sim
-            <input type="radio" name="resposta1" value="r2"> Não
-            <input type="radio" name="resposta1" value="r3"> Talvez
-            <input type="radio" name="resposta1" value="r4"> Nunca
-            <input type="radio" name="resposta1" value="r5"> Sempre <br>
-            <input type="submit" value="Enviar">
-        </form>
-        '
-        ,
-        '
-        <form method="post">
-            <label> O alex é o pior nor CS? </label><br>
-            <input type="radio" name="resposta2" value="r1"> Sim
-            <input type="radio" name="resposta2" value="r2"> Não
-            <input type="radio" name="resposta2" value="r3"> Talvez
-            <input type="radio" name="resposta2" value="r4"> Nunca
-            <input type="radio" name="resposta2" value="r5"> Sempre <br>
-            <input type="submit" value="Enviar">
-        </form>
-        '
-        ,
-        '
-        <form method="post">
-            <label> O alex fica sempre em ultimo no CS? </label><br>
-            <input type="radio" name="resposta2" value="r1"> Sim
-            <input type="radio" name="resposta2" value="r2"> Não
-            <input type="radio" name="resposta2" value="r3"> Talvez
-            <input type="radio" name="resposta2" value="r4"> Nunca
-            <input type="radio" name="resposta2" value="r5"> Sempre <br>
-            <input type="submit" value="Enviar">
-        </form>
-        '
-    );
-?>
-
 <html>
 <head>
     <title>Alex Takii</title>
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="estilo.css">
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 </head>
 <body style="text-align: center;">
 
     <h2> Trabalho Alex Takii </h2>
 
-    <form method="get">Questão: 
-        <input type="submit" name="questao" value="1">
-        <input type="submit" name="questao" value="2">
-        <input type="submit" name="questao" value="3">
+    <form action="index.php" method="post">
+        <div class="pergunta">
+            <label> 1. O alex é ruim no CS? </label><br>
+            <input type="radio" name="resposta1" value="r1"> Sim
+            <input type="radio" name="resposta1" value="r2"> Não
+            <input type="radio" name="resposta1" value="r3"> Talvez
+            <input type="radio" name="resposta1" value="r4"> Nunca
+            <input type="radio" name="resposta1" value="r5"> Sempre
+        </div>
+        <div class="pergunta">
+            <label> 2. O alex é o pior nor CS? </label><br>
+            <input type="radio" name="resposta2" value="r1"> Sim
+            <input type="radio" name="resposta2" value="r2"> Não
+            <input type="radio" name="resposta2" value="r3"> Talvez
+            <input type="radio" name="resposta2" value="r4"> Nunca
+            <input type="radio" name="resposta2" value="r5"> Sempre
+        </div>
+        <div class="pergunta">
+            <label> 3. O alex fica sempre em ultimo no CS? </label><br>
+            <input type="radio" name="resposta3" value="r1"> Sim
+            <input type="radio" name="resposta3" value="r2"> Não
+            <input type="radio" name="resposta3" value="r3"> Talvez
+            <input type="radio" name="resposta3" value="r4"> Nunca
+            <input type="radio" name="resposta3" value="r5"> Sempre
+        </div>
+        <input class="teste" type="submit" value="Enviar">
     </form>
 
-    <?php
-        $teste = 0;
-        
+<?php
+    #print_r($_POST);
 
-        # funcao que da check em algum dos valores do input radio
+    $respostasCertas = array("r5","r1","r1");
 
-        if ($teste == 0) {
-            # muda o input para checked
-            $questoes[0] = str_replace('value="r1"', 'value="r1" checked', $questoes[0]);
-            $questoes[1] = str_replace('value="nao"', 'value="nao" checked', $questoes[1]);
-            $questoes[2] = str_replace('value="sim"', 'value="sim" checked', $questoes[2]);
-        }
-        
+    #print_r($respostasCertas);
 
-        if(!isset($_GET['questao'])) {
-            echo $questoes[0];
-        } else {
-            echo $questoes[$_GET['questao']-1];
-        }
-        
-        if(!isset($_POST['resposta1'])) {
-            echo "Nenhuma resposta";
-        } else {
-            echo $_POST['resposta1'];
-            # inclui um valor na lista de respostas
-            if(isset($_POST['resposta1'])) {
-                $respostas[] = $_POST['resposta1'];
+    # conta quantas respostas correspondem a certas
+    $cont = 0;
+    if(count($_POST) == count($respostasCertas)){
+        for($i = 0; $i < count($respostasCertas); $i++){
+            if($respostasCertas[$i] == $_POST["resposta".($i+1)]){
+                $cont++;
             }
-            if(isset($_POST['resposta2'])) {
-                $respostas[] = $_POST['resposta2'];
-            }
-            if(isset($_POST['resposta3'])) {
-                $respostas[] = $_POST['resposta3'];
-            }
-            # printa as respostas
-            print_r($respostas);
-
         }
+    } else {
+        echo "<h3 style='color: red;'>Falta respostas para serem enviadas!</h3>";
+    }
 
+    /*
+    foreach($_POST as $key => $value){
+        print_r($value);
+        echo "<hr>";
+        print_r($respostasCertas[$cont]);
+        echo "<hr>";
+        print_r($cont);
+        if($value == $respostasCertas[$cont]){
+            $cont++;
+        }
+    }
+    */
+    # changes the color of the text
+    if($cont == 0){
+        echo "<h1 style='color: red;'>". $cont . "/" . count($respostasCertas) ."</h1>";
+    }else if($cont >= 1 && $cont <= 2){
+        echo "<h1 style='color: orange;'>" . $cont . "/" . count($respostasCertas) ."</h1>";
+    }else if($cont == 3){
+        echo "<h1 style='color: green;'>". $cont . "/" . count($respostasCertas) ."</h1>";
+    }
     ?>
-
 </body>
 </html>
